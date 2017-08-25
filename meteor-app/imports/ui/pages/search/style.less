@@ -1,4 +1,48 @@
 .page--search {
+  font-family: Roboto;
+  img {
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: stretch;
+    width: 100%;
+    margin-bottom: 40px;
+  }
+
+  .result-container{
+    position: relative;
+    display: inline-block;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    justify-content: space-around;
+    flex-direction:row;
+    overflow: auto;
+
+    .mdc-button {
+      border:1px solid lightgray;
+      span {
+        padding-left: 10px;
+      }
+    }
+  }
+
+  .mdc-layout-grid {
+    color:#4E5C6E;
+    .content-row-1 {
+      font-size: 20px;
+      padding-bottom: 30px;
+    }
+    .content-row-2, .content-row-3 {
+      padding-bottom: 30px;
+    }
+  }
+
+
   display: flex;
   flex-direction: row;
 
@@ -12,6 +56,7 @@
 
   &__sidepanel {
     flex: 0 0 auto;
+    text-transform: capitalize;
 
     .child_common;
 
@@ -26,6 +71,8 @@
     .child_common;
 
     .sk-search-box {
+      box-shadow: 0 1px 3px 0 rgba(0,0,0,.08);
+      border: 1px solid lightgray;
       input.sk-search-box__text {
         color: black;
 
@@ -33,6 +80,57 @@
           color: @global-bg-color;
         }
       }
+    }
+
+    .sk-layout__results {
+      margin:0;
+      box-shadow: none;
+      a {
+        text-decoration: none;
+      }
+      .app-bar {
+        position: relative;
+        align-items: stretch;
+        margin: 10px;
+        background-color: #220E10;
+        color: white;
+        height: 50px;
+        padding: 10px;
+        a {
+          color: white;
+        }
+        .date {
+          display: flex;
+          justify-content: flex-end;
+          align-items: flex-end;
+          color:white;
+        }
+        a:hover {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+      .mdc-tab-bar {
+        a{
+          color: black;
+        }
+      }
+      .mdc-layout-grid {
+        padding:0px;
+        margin:10px;
+      }
+      .button {
+        margin: 10px;
+        span {
+          padding-left:10px;
+        }
+      }
+    }
+
+    .sk-hits-grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .sk-pagination-navigation {
