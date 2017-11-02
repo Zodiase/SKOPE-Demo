@@ -1,0 +1,82 @@
+.page-workspace {
+  .flex-col;
+
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+
+  & > .section-map {
+    .layout-fill;
+  }
+
+  .section-map {
+
+    //=================================================================
+    // Parent-child positioning styling.
+    //=================================================================
+
+    .flex-row;
+
+    & > .map-panel {
+      .layout-fill;
+    }
+
+    //=================================================================
+    // Children's own styling.
+    //=================================================================
+
+    .side-panel {
+      width: 400px;
+      box-sizing: content-box;
+
+      .flex-col;
+
+      &__content {
+        .layout-fill;
+
+        overflow: auto;
+      }
+
+      &__section {
+        padding: 10px;
+      }
+    }
+
+    .layer-list {
+      &__item {
+        margin-bottom: 5px;
+      }
+
+      .layer-opacity-row {
+        .flex-row;
+
+        align-items: center;
+
+        .input-slider--layer-opacity {
+          .layout-fill;
+
+          margin-left: 10px;
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .map-panel {
+      .flex-col;
+
+      & > .map-wrapper {
+        .layout-fill;
+      }
+    }
+
+    .map-wrapper > .the-map {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .the-map {
+      border: 0;
+    }
+  }
+}
