@@ -1,0 +1,17 @@
+.dataset__analytics-tab {
+  .two-column-layout();
+
+  & > .analytics__controls {
+    .two-column-layout > .left;
+    .two-column-layout > .top-layer;
+  }
+  & > .analytics__charts {
+    .two-column-layout > .right;
+    .two-column-layout > .bottom-layer;
+  }
+
+  & > .analytics__toolbar {
+    grid-area: toolbar;
+    z-index: 1;
+  }
+}

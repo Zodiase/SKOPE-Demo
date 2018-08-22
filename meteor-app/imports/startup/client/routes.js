@@ -1,152 +1,86 @@
 import { Meteor } from 'meteor/meteor';
-import { FlowRouter } from 'meteor/kadira:flow-router';
-import React from 'react';
-import { mount } from 'react-mounter';
-
-import { createStore } from 'meteor/zodiase:reactive-redux-store';
-
-// Import actions for the redux store.
-import * as actions from '/imports/ui/actions';
-// Import reducers for the redux store.
-import reducers from '/imports/ui/reducers';
+import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
+import { FlowRouterTitle } from 'meteor/ostrio:flow-router-title';
+import ReactGA from 'react-ga';
+import objectPath from 'object-path';
 
 // Import needed templates
-import MainLayout from '/imports/ui/layouts/main/container';
-import FullWindowLayout from '/imports/ui/layouts/full-window/container';
-import HomePage from '/imports/ui/pages/home/container';
-import SearchPage from '/imports/ui/pages/search/container';
-import WorkspacePage from '/imports/ui/pages/workspace/container';
-import ChartsPage from '/imports/ui/pages/workspace/charts/container';
-import NotFoundPage from '/imports/ui/pages/not-found/container';
+import SearchPage from '/imports/ui/pages/search-by-map';
+import WorkspacePage from '/imports/ui/pages/dynamic-workspace';
+import NotFoundPage from '/imports/ui/pages/not-found';
 
-const store = createStore(reducers);
-//! Attach to window for debugging.
-window.store = store;
+import {
+  simpleMountAction,
+} from '/imports/helpers/ui/routing';
+import {
+  NOOP,
+} from '/imports/helpers/model';
+
+// Set default document.title value in case router has no title property.
+FlowRouter.globals.push({
+  title: 'SKOPE',
+});
+
+// These triggers are called before those defined in individual routes.
+FlowRouter.triggers.enter([
+  (context) => ReactGA.pageview(context.path),
+]);
 
 // Set up all routes in the app
 FlowRouter.route('/', {
   name: 'App.home',
-  action() {
-    const {
-      // group,
-      // name,
-      path,
-      // pathDef,
-    } = this;
-
-    store.dispatch({
-      type: actions.PAGE_ENTRY.type,
-      path,
-    });
-
-    mount(MainLayout, {
-      store,
-      body: <HomePage />,
-    });
-  },
+  title: 'Home - SKOPE',
+  triggersEnter: [(context, redirect) => {
+    redirect('/discover');
+  }],
+  action: NOOP,
 });
 
+// Deprecated route.
 FlowRouter.route('/search', {
   name: 'App.search',
-  action() {
-    const {
-      path,
-    } = this;
+  title: 'Search - SKOPE',
+  triggersEnter: [(context, redirect) => {
+    redirect('/discover');
+  }],
+  action: NOOP,
+});
 
-    store.dispatch({
-      type: actions.PAGE_ENTRY.type,
-      path,
-    });
+// Deprecated route.
+FlowRouter.route('/explore', {
+  name: 'App.explore',
+  title: 'Explore - SKOPE',
+  triggersEnter: [(context, redirect) => {
+    redirect('/discover');
+  }],
+  action: NOOP,
+});
 
-    mount(MainLayout, {
-      store,
-      body: (
-        <SearchPage
-          {...{
-            store,
-          }}
-        />
-      ),
-    });
-  },
+FlowRouter.route('/discover', {
+  name: 'App.discover',
+  title: 'Discover - SKOPE',
+  action: simpleMountAction(SearchPage),
 });
 
 FlowRouter.route('/workspace', {
   name: 'App.workspace',
-  action(params, queryParams) {
-    const {
-      path,
-    } = this;
-
-    store.dispatch({
-      type: actions.PAGE_ENTRY.type,
-      path,
-    });
-
-    store.dispatch({
-      type: actions.WORKSPACE_SET_FILTER_FROM_URL.type,
-      value: queryParams.filterValue,
-    });
-
-    mount(FullWindowLayout, {
-      store,
-      body: (
-        <WorkspacePage
-          {...{
-            store,
-            updateFilterValue: (newValue) => {
-              FlowRouter.go(path, {}, {
-                filterValue: newValue,
-              });
-            },
-          }}
-        />
-      ),
-    });
-  },
+  title: 'Workspace - SKOPE',
+  action: simpleMountAction(WorkspacePage),
 });
 
-FlowRouter.route('/workspace/charts', {
-  name: 'App.workspace.charts',
-  action(params, queryParams) {
-    const {
-      path,
-    } = this;
-
-    store.dispatch({
-      type: actions.PAGE_ENTRY.type,
-      path,
-    });
-
-    const coord = [parseFloat(queryParams.longitude), parseFloat(queryParams.latitude)];
-    Meteor.call('timeseries.get', { lon: coord[0], lat: coord[1] }, (error, result) => {
-      store.dispatch({
-        type: actions.CHARTS_INSPECT_POINT_RESOLVE_DATA.type,
-        coordinate: coord,
-        error,
-        result,
-      });
-    });
-
-    mount(ChartsPage, {
-      store,
-    });
-  },
+FlowRouter.route('*', {
+  name: 'App.notFound',
+  title: 'Page not found - SKOPE',
+  action: simpleMountAction(NotFoundPage),
 });
 
-FlowRouter.notFound = {
-  action() {
-    const {
-      path,
-    } = this;
+export
+const titleHandler = new FlowRouterTitle(FlowRouter);
 
-    store.dispatch({
-      type: actions.PAGE_ENTRY.type,
-      path,
-    });
+((gaTrackingId) => {
+  if (!gaTrackingId) {
+    return;
+  }
 
-    mount(MainLayout, {
-      body: <NotFoundPage />,
-    });
-  },
-};
+  ReactGA.initialize(gaTrackingId);
+})(objectPath.get(Meteor.settings, 'public.gaTrackingId'));

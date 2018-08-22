@@ -1,0 +1,193 @@
+.page-search {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+
+.page-search {
+  @gapBetweenSearchResultItems: 1em;
+  @resultItemMaxWidth: 60em;
+  @resultItemMinWidth: 35em;
+  @resultItemThumbnailWidth: 15em;
+
+  .flex-col;
+  font-family: Roboto;
+
+  & > .the-dummy-tabbar {
+    .tabs-panel {
+      .tab-button {
+        cursor: pointer;
+
+        &:disabled {
+          cursor: not-allowed;
+    
+          &:not(:hover) {
+            opacity: 0.3;
+          }
+        }
+      }
+
+      .tab-label {
+        .flex-row;
+        align-items: center;
+    
+        & > svg {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+
+  & > .not-the-dummy-tabbar {
+    flex: 1 1 0;
+
+    .flex-row;
+
+    // Set the side-to-side ratio here.
+    & > .page-search__search {
+      flex: 1 1 0;
+      max-width: 30em;
+      min-width: 20em;
+    }
+
+    & > .page-search__result {
+      flex: 2 2 0;
+      // `2` is for the margins around the result items.
+      min-width: @resultItemMinWidth + 2;
+    }
+  }
+
+  .page-search__search {
+    padding: @global-layout-padding;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .page-search__search__inner {
+    .flex-col;
+
+    & > .layout-filler {
+      .flex-layout-fill;
+    }
+
+    & > * {
+      margin-bottom: 20px;
+    }
+
+    height: 100%;
+    width: 100%;
+
+    // Default design in SearchKit is light on dark. Need to change color.
+    .sk-search-box {
+      @color: rgba(0, 0, 0, 0.7);
+
+      border: 1px solid @color;
+
+      input.sk-search-box__text {
+        color: @color;
+      }
+    }
+
+    .filter--startdate-range,
+    .filter--enddate-range {
+      & .sk-range-slider {
+        margin-left: 25px;
+        margin-right: 25px;
+      }
+    }
+  }
+
+  .page-search__result {
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: @global-layout-padding;
+  }
+
+  .page-search__result__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(@resultItemMinWidth, @resultItemMaxWidth));
+    grid-gap: @gapBetweenSearchResultItems;
+    justify-content: space-around;
+  }
+
+  .search-result-item {
+    display: block;
+    width: 100%;
+    box-sizing: content-box;
+    // Leave some padding for the card shadow inside.
+    @paddingForCardShadow: 0;
+    padding: @paddingForCardShadow;
+  }
+
+  .search-result-item__content {
+    display: grid;
+    grid-template-areas: "thumbnail title       openBtn"
+                         "thumbnail description description";
+    grid-template-rows: auto auto;
+    grid-template-columns: @resultItemThumbnailWidth 1fr auto;
+    grid-gap: 0.5em 1em;
+
+    & > .search-result-item__title {
+      grid-area: title;
+    }
+
+    & > .search-result-item__thumbnail {
+      grid-area: thumbnail;
+      height: @resultItemThumbnailWidth;
+    }
+
+    & > .search-result-item__description {
+      grid-area: description;
+    }
+
+    & > .search-result-item__open-button {
+      grid-area: openBtn;
+    }
+  }
+
+  .search-result-item__title {
+    // This is needed for it to not expand with content.
+    // Which in turn makes `textOverflow` on childrens effective.
+    overflow: hidden;
+  }
+
+  .search-result-item__thumbnail {
+    display: block;
+  }
+
+  .search-result-item__description {
+    font-size: 12px;
+    line-height: 125%;
+    & > p:first-child {
+      margin-top: 0;
+    }
+    p {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+  }
+
+  .page-search__action-bar {
+    margin: 0;
+  }
+
+  .selected-filters {
+    .flex-row;
+    flex-wrap: wrap;
+
+    .selected-filters__item {
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+  }
+
+  .page-search__reset-button.is-disabled {
+    display: none;
+  }
+
+  .page-search__result__pagination {
+    margin-top: 30px;
+    margin-bottom: 50px;
+  }
+}

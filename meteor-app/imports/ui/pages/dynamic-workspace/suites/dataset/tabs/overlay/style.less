@@ -1,0 +1,30 @@
+.dataset__overlay-tab {
+  .two-column-layout();
+
+  & > .overlay__controls {
+    .two-column-layout > .left;
+    .two-column-layout > .top-layer;
+  }
+  & > .overlay__map {
+    .two-column-layout > .right;
+    .two-column-layout > .bottom-layer;
+  }
+
+  .overlay__controls {
+    .flex-col;
+
+    .map-and-toolbar {
+      padding: 10px;
+    }
+  }
+
+  .overlay__map {
+    .flex-col;
+    overflow-y: auto;
+
+    & > .mapview {
+      .layout-fill;
+      min-height: 300px;
+    }
+  }
+}

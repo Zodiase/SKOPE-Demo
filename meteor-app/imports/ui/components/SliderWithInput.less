@@ -1,0 +1,26 @@
+.SliderWithInput,
+.RangeWithInput {
+    display: grid;
+    grid-template-areas: "label input"
+                         "slider slider";
+    grid-auto-columns: 1fr auto;
+    grid-auto-rows: auto auto;
+
+    &__label {
+      grid-area: label;
+      justify-self: start;
+      align-self: center;
+    }
+
+    &__input {
+      grid-area: input;
+      justify-self: end;
+      align-self: center;
+    }
+
+    &__slider {
+      grid-area: slider;
+      justify-self: stretch;
+      align-self: center;
+    }
+}
