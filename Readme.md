@@ -1,5 +1,7 @@
 # SKOPE Web App
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Zodiase/SKOPE-Demo.svg)](https://greenkeeper.io/)
+
 The app is deployed at http://staging.openskope.org/app.
 
 ## To develop the app locally
